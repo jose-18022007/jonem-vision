@@ -1,24 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CustomCursor } from "@/components/CustomCursor";
+import { PageLoader } from "@/components/PageLoader";
+import { Navbar } from "@/components/Navbar";
+import { HeroSection } from "@/components/HeroSection";
+import { MarqueeStrip } from "@/components/MarqueeStrip";
+import { AboutSection } from "@/components/AboutSection";
+import { ServicesSection } from "@/components/ServicesSection";
+import { ProcessSection } from "@/components/ProcessSection";
+import { TeamSection } from "@/components/TeamSection";
+import { WhyUsSection } from "@/components/WhyUsSection";
+import { ContactSection } from "@/components/ContactSection";
+import { Footer } from "@/components/Footer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "JONEM — Software & IT Solutions" },
+      { name: "description", content: "JONEM is a premium software company building web, cloud, automation, and SaaS solutions. Founded by Jose, Bhaarathi Nesan, and Emmanuel Joshua." },
+      { property: "og:title", content: "JONEM — Software & IT Solutions" },
+      { property: "og:description", content: "We transform bold ideas into powerful digital realities." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="relative">
+      <PageLoader />
+      <CustomCursor />
+      <Navbar />
+      <main>
+        <HeroSection />
+        <MarqueeStrip />
+        <AboutSection />
+        <ServicesSection />
+        <ProcessSection />
+        <TeamSection />
+        <WhyUsSection />
+        <ContactSection />
+      </main>
+      <Footer />
     </div>
   );
 }
