@@ -7,10 +7,12 @@ import { MarqueeStrip } from "@/components/MarqueeStrip";
 import { AboutSection } from "@/components/AboutSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { ProcessSection } from "@/components/ProcessSection";
+import { ProjectsSection } from "@/components/ProjectsSection";
 import { TeamSection } from "@/components/TeamSection";
 import { WhyUsSection } from "@/components/WhyUsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { FloatingContact } from "@/components/FloatingContact";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -38,11 +40,14 @@ function Home() {
         <AboutSection />
         <ServicesSection />
         <ProcessSection />
+        <ProjectsSection />
         <TeamSection />
         <WhyUsSection />
         <ContactSection />
       </main>
       <Footer />
+      <FloatingContact />
     </div>
   );
 }
+
