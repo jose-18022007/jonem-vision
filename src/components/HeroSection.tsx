@@ -8,8 +8,8 @@ export function HeroSection() {
   return (
     <section
       id="top"
-      className="relative flex items-center justify-center overflow-hidden"
-      style={{ background: "#e7e5e0", minHeight: "100vh", paddingTop: 140, paddingBottom: 80 }}
+      className="relative flex items-center justify-center overflow-hidden hero-section"
+      style={{ background: "#e7e5e0", minHeight: "100vh" }}
     >
       <HeroAura />
 
@@ -46,33 +46,37 @@ export function HeroSection() {
         </div>
       </motion.div>
 
-      <div className="relative z-10 flex w-full max-w-[680px] flex-col items-center px-6 text-center">
+      <div
+        className="relative flex flex-col items-center text-center px-4"
+        style={{ zIndex: 10, maxWidth: "90vw", width: "100%" }}
+      >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.6, duration: 0.6 }}
-          className="rounded-full px-5 py-2 neu-inset-sm"
+          className="hero-tag rounded-full neu-inset-sm"
         >
-          <span className="font-label text-[0.7rem] uppercase" style={{ letterSpacing: "0.2em" }}>Software & IT Solutions</span>
+          <span className="font-label uppercase" style={{ letterSpacing: "0.15em" }}>Software & IT Solutions</span>
         </motion.div>
 
-        <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.08, delayChildren: 1.7 } } }}
-          className="mt-5 font-display text-hero-3d text-[#111827]"
-          style={{ fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 0.95, letterSpacing: "-0.04em" }}
-        >
-          {letters.map((c, i) => (
-            <motion.span
-              key={i}
-              variants={{ hidden: { y: 60, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100, damping: 15 } } }}
-              style={{ display: "inline-block" }}
-            >
-              {c}
-            </motion.span>
-          ))}
-        </motion.h1>
+        <div className="hero-title-wrapper relative">
+          <motion.h1
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { staggerChildren: 0.08, delayChildren: 1.7 } } }}
+            className="hero-jonem-title font-display text-[#111827]"
+          >
+            {letters.map((c, i) => (
+              <motion.span
+                key={i}
+                variants={{ hidden: { y: 60, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100, damping: 15 } } }}
+                style={{ display: "inline-block" }}
+              >
+                {c}
+              </motion.span>
+            ))}
+          </motion.h1>
+        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}

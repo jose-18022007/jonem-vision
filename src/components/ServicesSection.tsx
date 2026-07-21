@@ -2,14 +2,20 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Globe, Cloud, Bot, Smartphone, Layers, type LucideIcon } from "lucide-react";
 
-type Card = { title: string; desc: string; icon: LucideIcon; span: string; variant: "raised" | "inset" | "dark" };
+type Card = {
+  title: string;
+  desc: string;
+  icon: LucideIcon;
+  dark?: boolean;
+  cls: string; // grid placement classes
+};
 
 const cards: Card[] = [
-  { title: "Web Development", desc: "Modern, performant web platforms built with the best of React, Next, and edge infrastructure.", icon: Globe, span: "md:col-span-2 md:row-span-1", variant: "raised" },
-  { title: "Cloud Solutions", desc: "Scalable cloud architectures designed for reliability, security, and cost efficiency.", icon: Cloud, span: "md:col-span-1 md:row-span-2", variant: "raised" },
-  { title: "Automation", desc: "Custom workflows that eliminate repetitive tasks and unlock team velocity.", icon: Bot, span: "md:col-span-1", variant: "inset" },
-  { title: "Mobile Applications", desc: "Native-quality mobile experiences across iOS and Android.", icon: Smartphone, span: "md:col-span-1", variant: "raised" },
-  { title: "SaaS Products", desc: "End-to-end SaaS engineering — from architecture and billing to onboarding.", icon: Layers, span: "md:col-span-2", variant: "dark" },
+  { title: "Web Development", desc: "Modern, performant web platforms built with the best of React, Next, and edge infrastructure.", icon: Globe, cls: "lg:col-span-2" },
+  { title: "Cloud Solutions", desc: "Scalable cloud architectures designed for reliability, security, and cost efficiency.", icon: Cloud, cls: "lg:col-span-1" },
+  { title: "Automation", desc: "Custom workflows that eliminate repetitive tasks and unlock team velocity.", icon: Bot, cls: "lg:col-span-1" },
+  { title: "Mobile Applications", desc: "Native-quality mobile experiences across iOS and Android.", icon: Smartphone, cls: "lg:col-span-1" },
+  { title: "SaaS Products", desc: "End-to-end SaaS engineering — from architecture and billing to onboarding.", icon: Layers, dark: true, cls: "sm:col-span-2 lg:col-span-1" },
 ];
 
 export function ServicesSection() {
@@ -24,16 +30,10 @@ export function ServicesSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-4 md:auto-rows-[220px]">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-3 lg:gap-4">
           {cards.map((c, i) => {
             const Icon = c.icon;
-            const isDark = c.variant === "dark";
-            const cls =
-              c.variant === "dark"
-                ? "text-[#e7e5e0]"
-                : c.variant === "inset"
-                ? "neu-inset"
-                : "neu-raised";
+            const isDark = !!c.dark;
             return (
               <motion.div
                 key={c.title}
@@ -41,19 +41,64 @@ export function ServicesSection() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 whileHover={{ y: -4 }}
-                className={`group relative flex flex-col justify-between overflow-hidden rounded-[24px] p-8 md:p-10 ${c.span} ${cls}`}
-                style={isDark ? { background: "#111827" } : undefined}
+                className={`service-card ${c.cls}`}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  padding: 28,
+                  borderRadius: 24,
+                  gap: 16,
+                  minHeight: 200,
+                  boxSizing: "border-box",
+                  position: "relative",
+                  overflow: "hidden",
+                  background: isDark ? "#111827" : "#e7e5e0",
+                  boxShadow: isDark
+                    ? "0 12px 32px rgba(17,24,39,0.20)"
+                    : "8px 8px 20px #d4d0c8, -8px -8px 20px #f5f3ef",
+                }}
               >
-                <div className="flex items-center gap-3">
-                  <div className={`grid h-11 w-11 place-items-center rounded-full ${isDark ? "bg-white/10" : "neu-inset-sm"}`}>
-                    <Icon size={20} />
-                  </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 48,
+                    height: 48,
+                    minWidth: 48,
+                    minHeight: 48,
+                    borderRadius: 14,
+                    flexShrink: 0,
+                    background: isDark ? "rgba(231,229,224,0.10)" : "#e7e5e0",
+                    boxShadow: isDark ? "none" : "5px 5px 10px #d4d0c8, -5px -5px 10px #f5f3ef",
+                    border: isDark ? "1px solid rgba(231,229,224,0.20)" : "none",
+                  }}
+                >
+                  <Icon size={22} color={isDark ? "#e7e5e0" : "#111827"} style={{ flexShrink: 0 }} />
                 </div>
-                <div>
-                  <h3 className={`font-label text-[1.2rem] ${isDark ? "text-[#e7e5e0]" : "text-[#111827]"}`} style={{ letterSpacing: "0.02em" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
+                  <h3
+                    className="font-label"
+                    style={{
+                      fontSize: "1.05rem",
+                      color: isDark ? "#e7e5e0" : "#111827",
+                      margin: 0,
+                      lineHeight: 1.3,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
                     {c.title}
                   </h3>
-                  <p className={`mt-2 font-body text-[0.92rem] ${isDark ? "text-[#e7e5e0]/70" : "text-[#111827]/65"}`}>
+                  <p
+                    className="font-body"
+                    style={{
+                      fontSize: "0.875rem",
+                      color: isDark ? "rgba(231,229,224,0.60)" : "rgba(17,24,39,0.65)",
+                      lineHeight: 1.65,
+                      margin: 0,
+                    }}
+                  >
                     {c.desc}
                   </p>
                 </div>

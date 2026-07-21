@@ -8,6 +8,9 @@ const actions = [
   { icon: Mail, label: "Email us", href: "mailto:hello@jonem.in" },
 ];
 
+const cleanShadow = "0 4px 12px rgba(17,24,39,0.14), 0 1px 4px rgba(17,24,39,0.08)";
+const cleanShadowHover = "0 6px 18px rgba(17,24,39,0.18), 0 2px 6px rgba(17,24,39,0.10)";
+
 export function FloatingContact() {
   const [open, setOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
@@ -18,8 +21,21 @@ export function FloatingContact() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t.closest("[data-floating-contact]")) setOpen(false);
+    };
+    window.addEventListener("click", onClick);
+    return () => window.removeEventListener("click", onClick);
+  }, [open]);
+
   return (
-    <div className="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-3">
+    <div
+      data-floating-contact
+      className="fixed bottom-8 right-8 z-[9999] flex flex-col items-end gap-3"
+    >
       <AnimatePresence>
         {showTop && (
           <motion.button
@@ -29,9 +45,22 @@ export function FloatingContact() {
             transition={{ type: "spring", stiffness: 200, damping: 18 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Back to top"
-            className="grid h-11 w-11 place-items-center rounded-full neu-raised-sm"
+            className="grid h-11 w-11 place-items-center rounded-full transition-all duration-200"
+            style={{
+              background: "#e7e5e0",
+              boxShadow: cleanShadow,
+              border: "1px solid rgba(17,24,39,0.10)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "0 6px 16px rgba(17,24,39,0.18)";
+              e.currentTarget.style.transform = "translateY(-2px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = cleanShadow;
+              e.currentTarget.style.transform = "translateY(0)";
+            }}
           >
-            <ChevronUp size={18} />
+            <ChevronUp size={18} color="#111827" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -53,7 +82,8 @@ export function FloatingContact() {
                   style={{
                     letterSpacing: "0.08em",
                     background: "#e7e5e0",
-                    boxShadow: "4px 4px 10px #d4d0c8, -4px -4px 10px #f5f3ef",
+                    boxShadow: "0 2px 8px rgba(17,24,39,0.10)",
+                    border: "1px solid rgba(17,24,39,0.08)",
                   }}
                 >
                   {a.label}
@@ -63,30 +93,49 @@ export function FloatingContact() {
                   target={a.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   aria-label={a.label}
-                  className="grid h-12 w-12 place-items-center rounded-full transition hover:scale-110"
-                  style={{ background: "#e7e5e0", boxShadow: "5px 5px 12px #d4d0c8, -5px -5px 12px #f5f3ef" }}
+                  className="grid h-12 w-12 place-items-center rounded-full transition-all duration-200"
+                  style={{
+                    background: "#e7e5e0",
+                    boxShadow: cleanShadow,
+                    border: "1px solid rgba(17,24,39,0.08)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = cleanShadowHover;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = cleanShadow;
+                  }}
                 >
-                  <I size={18} />
+                  <I size={18} color="#111827" />
                 </a>
               </motion.div>
             );
           })}
       </AnimatePresence>
 
-      <motion.button
-        whileHover={{ scale: 1.1 }}
+      <button
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close contact menu" : "Open contact menu"}
-        className="grid h-14 w-14 place-items-center rounded-full text-[#e7e5e0]"
+        className="grid h-14 w-14 place-items-center rounded-full text-[#e7e5e0] transition-all"
         style={{
           background: "#111827",
-          boxShadow: "8px 8px 20px rgba(17,24,39,0.25), -4px -4px 12px rgba(231,229,224,0.8)",
+          boxShadow: "0 4px 16px rgba(17,24,39,0.20), 0 2px 6px rgba(17,24,39,0.12)",
+          transitionTimingFunction: "cubic-bezier(0.34,1.56,0.64,1)",
+          transitionDuration: "0.25s",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 8px 24px rgba(17,24,39,0.28), 0 4px 10px rgba(17,24,39,0.16)";
+          e.currentTarget.style.transform = "scale(1.08)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "0 4px 16px rgba(17,24,39,0.20), 0 2px 6px rgba(17,24,39,0.12)";
+          e.currentTarget.style.transform = "scale(1)";
         }}
       >
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ type: "spring", stiffness: 200, damping: 15 }}>
           {open ? <X size={22} /> : <MessageCircle size={22} />}
         </motion.div>
-      </motion.button>
+      </button>
     </div>
   );
 }
